@@ -16,7 +16,17 @@ const ColorList = ({ colors, updateColors }) => {
     setColorToEdit(color);
   };
 
-  const saveEdit = e => {
+  const saveEdit = index => e => {
+    setColorToEdit({
+      ...colorToEdit,
+      color: colors.map((color, indexOfColor) => {
+        if (indexOfColor === index) {
+          return e.target.value;
+        } else {
+          return color;
+        }
+      })
+    });
     e.preventDefault();
     // Make a put request to save your updated color
     // think about where will you get the id from...
@@ -25,7 +35,7 @@ const ColorList = ({ colors, updateColors }) => {
       .put(`http://localhost:5000/api/colors/${colorToEdit.id}`, colorToEdit)
       .then(res => {
         console.log(res);
-        updateColors([...colors, res.data]);
+        // map over existing array, find color to be edited by id or name, find a way to change it and return that particular one.
       })
       .catch(err => console.log(err.response));
   };
